@@ -1,0 +1,6 @@
+node_modules
+.cache
+
+# Local Config Files
+src/api-server/config.json
+src/collection-server/config.json
