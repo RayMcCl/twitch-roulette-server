@@ -1,5 +1,6 @@
 node_modules
 .cache
+dist
 
 # Local Config Files
 src/api-server/config.json
