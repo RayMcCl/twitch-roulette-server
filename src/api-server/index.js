@@ -6,12 +6,14 @@
  * @author Ray McClain
  * @desc  
  * 
- * Last Modified: Sunday, 8th April 2018 1:14:21 pm
+ * Last Modified: Sunday, 8th April 2018 11:21:31 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
 import Express from 'express';
 import Morgan from 'morgan';
+import Sequelize from 'sequelize';
+import Stream from 'DATABASE/stream_data/models/stream';
 
 const app = Express();
 
@@ -19,8 +21,14 @@ app.get('/', (req, res) => {
     res.send('Hello World');
 });
 
-app.get('/api/courses', (req, res) => {
-    res.send([1,2,3]);
+app.get('/api/streams', (req, res) => {
+    Stream
+        .find({
+            order: [
+                Sequelize.fn( 'RAND' ),
+            ]
+        })
+        .then(results => res.send(JSON.stringify(results)));
 });
 
 app.listen(3000, () => {

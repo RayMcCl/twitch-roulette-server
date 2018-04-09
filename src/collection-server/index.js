@@ -6,20 +6,14 @@
  * @author Ray McClain
  * @desc  
  * 
- * Last Modified: Sunday, 8th April 2018 1:15:45 pm
+ * Last Modified: Sunday, 8th April 2018 8:56:16 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
-import Express from 'express';
-import Morgan from 'morgan';
-import Schedule from 'node-schedule';
+import Stream from 'DATABASE/stream_data/models/Stream';
+import config from './config';
+import StreamService from './services/stream.service';
 
-const app = Express();
+const streamService = new StreamService(config);
 
-app.get('/', (req, res) => {
-    res.send('Hello World');
-});
-
-app.listen(3000, () => {
-    console.log('Listening on port 3000.');
-});
+streamService.getLiveStreams();
