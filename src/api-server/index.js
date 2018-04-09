@@ -6,11 +6,12 @@
  * @author Ray McClain
  * @desc  
  * 
- * Last Modified: Sunday, 8th April 2018 11:21:31 pm
+ * Last Modified: Sunday, 8th April 2018 11:40:25 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
 import Express from 'express';
+import cors from 'cors';
 import Morgan from 'morgan';
 import Sequelize from 'sequelize';
 import Stream from 'DATABASE/stream_data/models/stream';
@@ -21,7 +22,7 @@ app.get('/', (req, res) => {
     res.send('Hello World');
 });
 
-app.get('/api/streams', (req, res) => {
+app.get('/api/streams', cors(), (req, res) => {
     Stream
         .find({
             order: [
