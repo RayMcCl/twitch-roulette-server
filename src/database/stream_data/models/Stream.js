@@ -6,12 +6,11 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Sunday, 8th April 2018 10:47:29 pm
+ * Last Modified: Monday, 9th April 2018 2:06:32 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 import Sequelize from 'sequelize';
 import connection from '../connection';
-import Log from './Log';
 
 const Stream = connection.define('stream', {
     id: {
@@ -47,12 +46,6 @@ const Stream = connection.define('stream', {
     language: {
         type: Sequelize.STRING(5)
     }
-});
-
-Stream.hasMany(Log);
-
-connection.sync().then(() => {
-    
 });
 
 export default Stream;
