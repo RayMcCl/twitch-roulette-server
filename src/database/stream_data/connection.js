@@ -6,13 +6,13 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Sunday, 8th April 2018 9:34:06 pm
+ * Last Modified: Sunday, 8th April 2018 11:31:27 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
 import Sequelize from 'sequelize';
 
-import { sqlAddress } from './config.js';
+import { sqlAddress } from './private.js';
 
 const sequelize = new Sequelize(sqlAddress, {
   define: {
