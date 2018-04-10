@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Monday, 9th April 2018 3:46:11 pm
+ * Last Modified: Monday, 9th April 2018 9:17:23 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -110,10 +110,10 @@ export default class StreamService {
                 LiveStream.upsert({
                     streamId: stream.get('id')
                 });
-                Log.create({
-                    streamId: stream.get('id'),
-                    ...entry
-                });
+                // Log.create({
+                //     streamId: stream.get('id'),
+                //     ...entry
+                // });
             });
     }
 
