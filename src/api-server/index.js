@@ -19,11 +19,7 @@ import LiveStream from 'DATABASE/stream_data/models/LiveStream';
 
 const app = Express();
 
-app.get('/', (req, res) => {
-    res.send('Hello World');
-});
-
-app.get('/api/streams', cors(), (req, res) => {
+app.get('/streams', (req, res) => {
     LiveStream
         .find({
             order: [
@@ -38,6 +34,10 @@ app.get('/api/streams', cors(), (req, res) => {
             });
         })
         .then(results => res.send(JSON.stringify(results)));
+});
+
+app.get('/', (req, res) => {
+    res.send('Hello World');
 });
 
 app.listen(3000, () => {
