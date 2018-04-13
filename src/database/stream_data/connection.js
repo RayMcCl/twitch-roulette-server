@@ -12,9 +12,9 @@
 
 import Sequelize from 'sequelize';
 
-import { sqlAddress } from './private.js';
+import { DATABASE_ADDRESS } from './private.js';
 
-const sequelize = new Sequelize(sqlAddress, {
+const sequelize = new Sequelize(DATABASE_ADDRESS, {
   define: {
     charset: 'utf8',
     collate: 'utf8_general_ci', 

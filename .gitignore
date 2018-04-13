@@ -4,3 +4,4 @@ dist
 
 # Local Config Files
 **/private.js
+*.ppk

@@ -7,7 +7,8 @@
         "~": "./src/",
         "DATABASE": "./src/database",
         "COLLECTION": "./src/collection-server",
-        "API": "./src/api-server"
+        "API": "./src/api-server",
+        "SSH": "./src/ssh/"
       }
     }],
     "transform-object-rest-spread"

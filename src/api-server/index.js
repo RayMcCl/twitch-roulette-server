@@ -13,33 +13,31 @@
 import Express from 'express';
 import cors from 'cors';
 import Morgan from 'morgan';
-import Sequelize from 'sequelize';
-import Stream from 'DATABASE/stream_data/models/Stream';
-import LiveStream from 'DATABASE/stream_data/models/LiveStream';
+import config from './private';
+import Tunnel from 'SSH/tunnel';
 
-const app = Express();
+// Routes
+import StreamRoute from './routes/stream';
+import LiveStreamRoute from './routes/live-stream';
 
-app.get('/streams', (req, res) => {
-    LiveStream
-        .find({
-            order: [
-                Sequelize.fn( 'RAND' ),
-            ]
-        })
-        .then(results => {
-            return Stream.find({
-                where: {
-                    id: results.streamId
-                }
-            });
-        })
-        .then(results => res.send(JSON.stringify(results)));
-});
+if(process.env.NODE_ENV === 'dev'){
+    // Create an SSH Tunnel into the server
+    new Tunnel(() => init);
+} else {
+    init();
+}
 
-app.get('/', (req, res) => {
-    res.send('Hello World');
-});
+function init () {
+    const app = Express();
 
-app.listen(3000, () => {
-    console.log('Listening on port 3000.');
-});
+    const stream = new StreamRoute(app);
+    const liveStream = new LiveStreamRoute(app);
+
+    app.get('/', (req, res) => {
+        res.send('Hello World');
+    });
+
+    app.listen(config.PORT, () => {
+        console.log('Listening on port ' + config.PORT + '.');
+    });
+}

@@ -10,11 +10,10 @@
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
-const USER = 'root';
-const PASS = 'root';
-
-const HOST = 'localhost';
-const PORT = '8008';
+const DATABASE_USER = 'root';
+const DATABASE_PASS = 'root';
+const DATABASE_HOST = '127.0.0.1';
+const DATABASE_PORT = '33333';
 const DATABASE = 'stream_data';
 
-export const sqlAddress = `mysql://${USER}:${PASS}@${HOST}:${PORT}/${DATABASE}`;
+export const DATABASE_ADDRESS = `mysql://${DATABASE_USER}:${DATABASE_PASS}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE}`;
