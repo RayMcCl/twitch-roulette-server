@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize';
+import cors from 'cors';
 import LiveStream from 'DATABASE/stream_data/models/LiveStream';
 import Stream from 'DATABASE/stream_data/models/Stream';
 
@@ -17,7 +18,7 @@ export default class LiveStreamRoute {
     }
 
     init () {
-        this.app.get('/live-stream', this.requestHandler.bind(this));
+        this.app.get('/live-stream', cors(), this.requestHandler.bind(this));
     }
 
     requestHandler (req, res){
