@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Saturday, 14th April 2018 6:45:41 pm
+ * Last Modified: Saturday, 14th April 2018 7:38:59 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -19,7 +19,7 @@ import Log from 'DATABASE/stream_data/models/Log';
 
 const TWITCH_API = 'https://api.twitch.tv/kraken/streams/';
 const INCREMENT = 100;
-const MIN_VIEWERS = 100;
+const MIN_VIEWERS = 1;
 const STREAM_RETAINED_KEYS = [
     '_id',
     'name',
