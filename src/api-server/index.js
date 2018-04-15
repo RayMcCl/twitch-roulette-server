@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc  
  * 
- * Last Modified: Monday, 9th April 2018 4:11:52 pm
+ * Last Modified: Saturday, 14th April 2018 5:24:28 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -20,9 +20,10 @@ import Tunnel from 'SSH/tunnel';
 import StreamRoute from './routes/stream';
 import LiveStreamRoute from './routes/live-stream';
 
-if(process.env.NODE_ENV === 'dev'){
+if(config.ENV === 'dev'){
+    console.log('Started in Dev Mode');
     // Create an SSH Tunnel into the server
-    new Tunnel(() => init);
+    new Tunnel(init);
 } else {
     init();
 }

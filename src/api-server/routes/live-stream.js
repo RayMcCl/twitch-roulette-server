@@ -25,7 +25,8 @@ export default class LiveStreamRoute {
         var filters = {
             order: [
                 [Stream, 'followers', 'DESC']
-            ]
+            ],
+            limit: 10
         };
 
         Object.assign(filters, this.queryHandler(req.query));

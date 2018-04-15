@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Monday, 9th April 2018 9:17:23 pm
+ * Last Modified: Saturday, 14th April 2018 6:45:41 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -19,6 +19,33 @@ import Log from 'DATABASE/stream_data/models/Log';
 
 const TWITCH_API = 'https://api.twitch.tv/kraken/streams/';
 const INCREMENT = 100;
+const MIN_VIEWERS = 100;
+const STREAM_RETAINED_KEYS = [
+    '_id',
+    'name',
+    'display_name',
+    'views',
+    'followers',
+    'url',
+    'broadcaster_language',
+    'partner',
+    'mature',
+    'game',
+    'viewers'
+];
+const STREAM_KEYS = {
+    '_id': 'stream_id',
+    'name': 'stream_name',
+    'display_name': 'display_name',
+    'views': 'views',
+    'viewers': 'viewers',
+    'followers': 'followers',
+    'url': 'url',
+    'broadcaster_language': 'language',
+    'partner': 'partner',
+    'mature': 'mature',
+    'game': 'game'
+};
 
 export default class StreamService {
     constructor (config) {
@@ -52,26 +79,13 @@ export default class StreamService {
                     this.writeStreamsToDB(filtered[i]);
                 }
                 
-                if(total > streams.length + index){
+                if(total > streams.length + index && filtered[filtered.length - 1].viewers > MIN_VIEWERS){
                     this.getStreams(index + INCREMENT);
                 }
             });
     }
 
     filterStreamData (data) {
-        var keyMapping = {
-            '_id': 'stream_id',
-            'name': 'stream_name',
-            'display_name': 'display_name',
-            'views': 'views',
-            'viewers': 'viewers',
-            'followers': 'followers',
-            'url': 'url',
-            'broadcaster_language': 'language',
-            'partner': 'partner',
-            'mature': 'mature',
-            'game': 'game'
-        };
         
         data = _.map(data, i => _.pick(i, [
             'channel',
@@ -81,22 +95,10 @@ export default class StreamService {
         data = _.map(data, i => _.merge(i, i.channel));
         
         return _.chain(data)
-            .map(i => _.pick(i, [
-                '_id',
-                'name',
-                'display_name',
-                'views',
-                'followers',
-                'url',
-                'broadcaster_language',
-                'partner',
-                'mature',
-                'game',
-                'viewers'
-            ]))
+            .map(i => _.pick(i, STREAM_RETAINED_KEYS))
             .map((obj) => {
                 return _.mapKeys(obj, (value, key) => {
-                    return keyMapping[key];
+                    return STREAM_KEYS[key];
                 });
             })
             .value();

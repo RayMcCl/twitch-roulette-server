@@ -9,6 +9,8 @@ export default class Tunnel {
                 console.log('SSH Connection Error:', error);
             }
 
+            console.log('SSH Connection Established');
+
             func();
         });
     }
