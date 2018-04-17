@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Monday, 16th April 2018 10:12:09 pm
+ * Last Modified: Monday, 16th April 2018 10:37:26 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -21,6 +21,7 @@ const TWITCH_API = 'https://api.twitch.tv/kraken/streams/';
 const INCREMENT = 100;
 const MIN_VIEWERS = 1;
 const MAX_STREAMS = 50000;
+const MAX_QUEUE = 10000;
 const STREAM_RETAINED_KEYS = [
     '_id',
     'name',
@@ -90,7 +91,7 @@ export default class StreamService {
 
                 if(total > streams.length + index && MAX_STREAMS > streams.length + index && filtered[filtered.length - 1].viewers > MIN_VIEWERS){
                     this.getStreams(index + INCREMENT);
-                } else {
+                } else if(this.streamQueue.length > MAX_QUEUE) {
                     this.writeStreamsToDB(this.streamQueue);
                     this.streamQueue = [];
                     this.streamQueueIds = [];
