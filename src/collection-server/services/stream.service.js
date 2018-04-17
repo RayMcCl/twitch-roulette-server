@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Monday, 16th April 2018 9:41:57 pm
+ * Last Modified: Monday, 16th April 2018 10:06:45 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -61,7 +61,7 @@ export default class StreamService {
     }
 
     getLiveStreams () {
-        this.clearLiveTable().then(this.getStreams.bind(this));
+        this.getStreams.bind(this);
     }
 
     getStreams (index = 0) {
@@ -130,9 +130,10 @@ export default class StreamService {
                         streamId: obj.dataValues.id
                     };
                 });
-
-                LiveStream.bulkCreate(live, {
-                    validate: true
+                LiveStream.truncate().then(() => {
+                    LiveStream.bulkCreate(live, {
+                        validate: true
+                    });
                 });
             }, (err) => {
             });
