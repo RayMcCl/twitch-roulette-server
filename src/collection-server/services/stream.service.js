@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Monday, 16th April 2018 9:28:25 pm
+ * Last Modified: Monday, 16th April 2018 9:41:57 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -93,6 +93,7 @@ export default class StreamService {
                 } else {
                     this.writeStreamsToDB(this.streamQueue);
                     this.streamQueue = [];
+                    this.streamQueueIds = [];
                 }
             });
     }
