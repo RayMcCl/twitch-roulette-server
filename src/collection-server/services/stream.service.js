@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Monday, 16th April 2018 10:08:12 pm
+ * Last Modified: Monday, 16th April 2018 10:12:09 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -61,7 +61,7 @@ export default class StreamService {
     }
 
     getLiveStreams () {
-        this.getStreams.bind(this);
+        this.getStreams();
     }
 
     getStreams (index = 0) {
