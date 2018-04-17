@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Monday, 16th April 2018 10:39:40 pm
+ * Last Modified: Monday, 16th April 2018 10:42:01 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -90,11 +90,14 @@ export default class StreamService {
                 this.streamQueue = this.streamQueue.concat(filtered);
 
                 if(total > streams.length + index && MAX_STREAMS > streams.length + index && filtered[filtered.length - 1].viewers > MIN_VIEWERS){
+                    if(this.streamQueue.length > MAX_QUEUE) {
+                        this.writeStreamsToDB(this.streamQueue);
+                        this.streamQueue = [];
+                        this.streamQueueIds = [];
+                    }
                     this.getStreams(index + INCREMENT);
-                } else if(this.streamQueue.length > MAX_QUEUE) {
-                    this.writeStreamsToDB(this.streamQueue);
-                    this.streamQueue = [];
-                    this.streamQueueIds = [];
+                } else {
+                    console.log('Finished Collection');
                 }
             });
     }
