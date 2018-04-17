@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Monday, 16th April 2018 10:37:26 pm
+ * Last Modified: Monday, 16th April 2018 10:39:40 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -124,8 +124,7 @@ export default class StreamService {
                 hooks: true,
                 validate: true,
                 benchmark: true,
-                updateOnDuplicate:true,
-                individualHooks: true
+                updateOnDuplicate:true
             }).then((createdInstances) => {
                 var live = createdInstances.map((obj) => {
                     return {
@@ -134,8 +133,7 @@ export default class StreamService {
                 });
                 LiveStream.truncate().then(() => {
                     LiveStream.bulkCreate(live, {
-                        validate: true,
-                        individualHooks: true
+                        validate: true
                     });
                 });
             }, (err) => {
