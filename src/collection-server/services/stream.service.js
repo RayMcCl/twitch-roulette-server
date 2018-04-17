@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Monday, 16th April 2018 9:25:47 pm
+ * Last Modified: Monday, 16th April 2018 9:28:25 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -20,7 +20,7 @@ var fs = require('fs');
 const TWITCH_API = 'https://api.twitch.tv/kraken/streams/';
 const INCREMENT = 100;
 const MIN_VIEWERS = 1;
-const MAX_STREAMS = 1000;
+const MAX_STREAMS = 50000;
 const STREAM_RETAINED_KEYS = [
     '_id',
     'name',
