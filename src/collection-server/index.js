@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc  
  * 
- * Last Modified: Monday, 9th April 2018 3:51:19 pm
+ * Last Modified: Monday, 16th April 2018 6:54:36 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -16,11 +16,25 @@ import Stream from 'DATABASE/stream_data/models/Stream';
 import config from './private';
 import connection from 'DATABASE/stream_data/connection';
 import StreamService from './services/stream.service';
+import Tunnel from 'SSH/tunnel';
+// import GameService from './services/game.service';
 
-const streamService = new StreamService(config);
+if(config.ENV === 'dev'){
+    console.log('Started in Dev Mode');
+    // Create an SSH Tunnel into the server
+    new Tunnel(init);
+} else {
+    init();
+}
 
-const twitchRequests = schedule.scheduleJob('*/10 * * * *', () => {
+function init () {
+    const streamService = new StreamService(config);
+    // const gameService = new GameService(config);
+
+    // const twitchRequests = schedule.scheduleJob('*/10 * * * *', () => {
     connection.sync().then(() => {
         streamService.getLiveStreams();
+        // gameService.getGames();
     });
-});
+    // });
+}

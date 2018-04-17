@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Monday, 9th April 2018 2:06:32 pm
+ * Last Modified: Monday, 16th April 2018 8:04:52 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 import Sequelize from 'sequelize';
@@ -35,7 +35,7 @@ const Stream = connection.define('stream', {
         type: Sequelize.INTEGER  
     },
     url: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
     },
     partner: {
         type: Sequelize.BOOLEAN

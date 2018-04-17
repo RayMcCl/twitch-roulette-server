@@ -6,20 +6,21 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Saturday, 14th April 2018 7:38:59 pm
+ * Last Modified: Monday, 16th April 2018 9:25:47 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
 import _ from 'lodash';
 import axios from 'axios';
-import connection from 'DATABASE/stream_data/connection';
 import Stream from 'DATABASE/stream_data/models/Stream';
 import LiveStream from 'DATABASE/stream_data/models/LiveStream';
 import Log from 'DATABASE/stream_data/models/Log';
+var fs = require('fs');
 
 const TWITCH_API = 'https://api.twitch.tv/kraken/streams/';
 const INCREMENT = 100;
 const MIN_VIEWERS = 1;
+const MAX_STREAMS = 1000;
 const STREAM_RETAINED_KEYS = [
     '_id',
     'name',
@@ -54,6 +55,9 @@ export default class StreamService {
                 'Client-ID': config.twitch_key
             }
         });
+
+        this.streamQueue = [];
+        this.streamQueueIds = [];
     }
 
     getLiveStreams () {
@@ -73,14 +77,22 @@ export default class StreamService {
                 const data = res.data;
                 const total = data._total;
                 const streams = data.streams;
-                const filtered = this.filterStreamData(streams);
+                let filtered = this.filterStreamData(streams);
+
+                filtered = filtered.filter((obj) => this.streamQueueIds.indexOf(obj.stream_id) === -1);
+
+                filtered.map((obj) => {
+                    this.streamQueueIds.push(obj.stream_id);
+                    return obj;
+                });
                 
-                for(var i = 0; i < filtered.length; i++){
-                    this.writeStreamsToDB(filtered[i]);
-                }
-                
-                if(total > streams.length + index && filtered[filtered.length - 1].viewers > MIN_VIEWERS){
+                this.streamQueue = this.streamQueue.concat(filtered);
+
+                if(total > streams.length + index && MAX_STREAMS > streams.length + index && filtered[filtered.length - 1].viewers > MIN_VIEWERS){
                     this.getStreams(index + INCREMENT);
+                } else {
+                    this.writeStreamsToDB(this.streamQueue);
+                    this.streamQueue = [];
                 }
             });
     }
@@ -104,18 +116,24 @@ export default class StreamService {
             .value();
     }
 
-    writeStreamsToDB (entry) {
-        var stream = Stream.build(entry);
-        return Stream
-            .upsert(stream.get())
-            .then(() => {
-                LiveStream.upsert({
-                    streamId: stream.get('id')
+    writeStreamsToDB (entries) {
+        Stream
+            .bulkCreate(entries, {
+                hooks: true,
+                validate: true,
+                benchmark: true,
+                updateOnDuplicate:true
+            }).then((createdInstances) => {
+                var live = createdInstances.map((obj) => {
+                    return {
+                        streamId: obj.dataValues.id
+                    };
                 });
-                // Log.create({
-                //     streamId: stream.get('id'),
-                //     ...entry
-                // });
+
+                LiveStream.bulkCreate(live, {
+                    validate: true
+                });
+            }, (err) => {
             });
     }
 
