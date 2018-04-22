@@ -17,7 +17,7 @@ import config from './private';
 import connection from 'DATABASE/stream_data/connection';
 import StreamService from './services/stream.service';
 import Tunnel from 'SSH/tunnel';
-// import GameService from './services/game.service';
+import GameService from './services/game.service';
 
 if(config.ENV === 'dev'){
     console.log('Started in Dev Mode');
@@ -29,10 +29,10 @@ if(config.ENV === 'dev'){
 
 function init () {
     const streamService = new StreamService(config);
-    // const gameService = new GameService(config);
+    const gameService = new GameService(config);
     connection.sync().then(() => {
         streamService.getLiveStreams();
-        // gameService.getGames();
+        gameService.getGames();
     });
     
     const twitchRequests = schedule.scheduleJob('*/10 * * * *', () => {

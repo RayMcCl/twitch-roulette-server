@@ -15,26 +15,12 @@ import axios from 'axios';
 import Stream from 'DATABASE/stream_data/models/Stream';
 import LiveStream from 'DATABASE/stream_data/models/LiveStream';
 import Log from 'DATABASE/stream_data/models/Log';
-var fs = require('fs');
 
 const TWITCH_API = 'https://api.twitch.tv/kraken/streams/';
 const INCREMENT = 100;
 const MIN_VIEWERS = 1;
 const MAX_STREAMS = 50000;
 const MAX_QUEUE = 10000;
-const STREAM_RETAINED_KEYS = [
-    '_id',
-    'name',
-    'display_name',
-    'views',
-    'followers',
-    'url',
-    'broadcaster_language',
-    'partner',
-    'mature',
-    'game',
-    'viewers'
-];
 const STREAM_KEYS = {
     '_id': 'stream_id',
     'name': 'stream_name',
@@ -57,8 +43,8 @@ export default class StreamService {
             }
         });
 
-        this.streamQueue = [];
-        this.streamQueueIds = [];
+        this.queue = [];
+        this.queueIds = [];
     }
 
     getLiveStreams () {
@@ -80,24 +66,24 @@ export default class StreamService {
                 const streams = data.streams;
                 let filtered = this.filterStreamData(streams);
 
-                filtered = filtered.filter((obj) => this.streamQueueIds.indexOf(obj.stream_id) === -1);
+                filtered = filtered.filter((obj) => this.queueIds.indexOf(obj.stream_id) === -1);
 
                 filtered.map((obj) => {
-                    this.streamQueueIds.push(obj.stream_id);
+                    this.queueIds.push(obj.stream_id);
                     return obj;
                 });
                 
-                this.streamQueue = this.streamQueue.concat(filtered);
+                this.queue = this.queue.concat(filtered);
 
                 if(total > streams.length + index && MAX_STREAMS > streams.length + index && filtered[filtered.length - 1].viewers > MIN_VIEWERS){
-                    if(this.streamQueue.length > MAX_QUEUE) {
-                        this.writeStreamsToDB(this.streamQueue);
-                        this.streamQueue = [];
-                        this.streamQueueIds = [];
+                    if(this.queue.length > MAX_QUEUE) {
+                        this.writeStreamsToDB(this.queue);
+                        this.queue = [];
+                        this.queueIds = [];
                     }
                     this.getStreams(index + INCREMENT);
                 } else {
-                    console.log('Finished Collection');
+                    console.log('Finished Stream Collection');
                 }
             });
     }
@@ -112,7 +98,7 @@ export default class StreamService {
         data = _.map(data, i => _.merge(i, i.channel));
         
         return _.chain(data)
-            .map(i => _.pick(i, STREAM_RETAINED_KEYS))
+            .map(i => _.pick(i, Object.keys(STREAM_KEYS)))
             .map((obj) => {
                 return _.mapKeys(obj, (value, key) => {
                     return STREAM_KEYS[key];

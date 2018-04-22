@@ -25,6 +25,12 @@ const Game = connection.define('game', {
     popularity: {
         type: Sequelize.INTEGER
     },
+    channels: {
+        type: Sequelize.INTEGER
+    },
+    viewers: {
+        type: Sequelize.INTEGER
+    },
     box_large: {
         type: Sequelize.TEXT
     },
@@ -40,7 +46,7 @@ const Game = connection.define('game', {
     logo_large: {
         type: Sequelize.TEXT
     },
-    logo:medium: {
+    logo_medium: {
         type: Sequelize.TEXT
     },
     logo_small: {
