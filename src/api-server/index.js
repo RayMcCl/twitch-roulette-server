@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc  
  * 
- * Last Modified: Saturday, 14th April 2018 5:24:28 pm
+ * Last Modified: Sunday, 22nd April 2018 5:53:54 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -19,6 +19,7 @@ import Tunnel from 'SSH/tunnel';
 // Routes
 import StreamRoute from './routes/stream';
 import LiveStreamRoute from './routes/live-stream';
+import GameRoute from './routes/game';
 
 if(config.ENV === 'dev'){
     console.log('Started in Dev Mode');
@@ -33,6 +34,7 @@ function init () {
 
     const stream = new StreamRoute(app);
     const liveStream = new LiveStreamRoute(app);
+    const game = new GameRoute(app);
 
     app.get('/', (req, res) => {
         res.send('Hello World');
