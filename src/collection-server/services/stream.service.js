@@ -6,17 +6,18 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Monday, 16th April 2018 10:42:01 pm
+ * Last Modified: Sunday, 22nd April 2018 4:56:16 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
 import _ from 'lodash';
-import axios from 'axios';
+import Queue from 'COLLECTION/helpers/api_queue';
 import Stream from 'DATABASE/stream_data/models/Stream';
 import LiveStream from 'DATABASE/stream_data/models/LiveStream';
 import Log from 'DATABASE/stream_data/models/Log';
 
 const TWITCH_API = 'https://api.twitch.tv/kraken/streams/';
+const UNIQUE_ID = 'stream_id';
 const INCREMENT = 100;
 const MIN_VIEWERS = 1;
 const MAX_STREAMS = 50000;
@@ -37,55 +38,16 @@ const STREAM_KEYS = {
 
 export default class StreamService {
     constructor (config) {
-        this.axios = axios.create({
-            headers: {
-                'Client-ID': config.twitch_key
-            }
-        });
-
-        this.queue = [];
-        this.queueIds = [];
+        this.queue = new Queue(config.twitch_key, TWITCH_API, UNIQUE_ID, MAX_STREAMS, MAX_QUEUE, INCREMENT, this.filterStreamData, this.writeStreamsToDB, this.getTotal);
     }
 
-    getLiveStreams () {
-        this.getStreams();
+    getData () {
+        console.log('Starting Stream Collection');
+        return this.queue.getData();
     }
 
-    getStreams (index = 0) {
-        console.log('Fetching Live Streams:', index, '-', index + 100);
-        this.axios
-            .get(TWITCH_API, {
-                params: {
-                    offset: index,
-                    limit: INCREMENT
-                }
-            })
-            .then((res) => { 
-                const data = res.data;
-                const total = data._total;
-                const streams = data.streams;
-                let filtered = this.filterStreamData(streams);
-
-                filtered = filtered.filter((obj) => this.queueIds.indexOf(obj.stream_id) === -1);
-
-                filtered.map((obj) => {
-                    this.queueIds.push(obj.stream_id);
-                    return obj;
-                });
-                
-                this.queue = this.queue.concat(filtered);
-
-                if(total > streams.length + index && MAX_STREAMS > streams.length + index && filtered[filtered.length - 1].viewers > MIN_VIEWERS){
-                    if(this.queue.length > MAX_QUEUE) {
-                        this.writeStreamsToDB(this.queue);
-                        this.queue = [];
-                        this.queueIds = [];
-                    }
-                    this.getStreams(index + INCREMENT);
-                } else {
-                    console.log('Finished Stream Collection');
-                }
-            });
+    getTotal (data) {
+        return data._total;
     }
 
     filterStreamData (data) {

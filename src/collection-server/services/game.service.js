@@ -6,92 +6,71 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Monday, 16th April 2018 6:50:43 pm
+ * Last Modified: Sunday, 22nd April 2018 5:14:42 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
 import _ from 'lodash';
-import axios from 'axios';
-
-var fs = require('fs');
 
 import Game from 'DATABASE/stream_data/models/Game';
+import Queue from 'COLLECTION/helpers/api_queue';
 
+const UNIQUE_ID = 'game_id';
 const MAX_GAMES = 50000;
-const MAX_QUEUE = 10000;
+const MAX_QUEUE = 500;
 const TWITCH_API = 'https://api.twitch.tv/kraken/games/top/';
 const INCREMENT = 100;
-
 const GAME_KEYS = {
-    '_id': 'stream_id',
-    'name': 'stream_name',
-    'display_name': 'display_name',
-    'views': 'views',
+    '_id': 'game_id',
+    'name': 'name',
+    'popularity': 'popularity',
+    'channels': 'channels',
     'viewers': 'viewers',
-    'followers': 'followers',
-    'url': 'url',
-    'broadcaster_language': 'language',
-    'partner': 'partner',
-    'mature': 'mature',
-    'game': 'game'
+    'box_large': 'box_large',
+    'box_medium': 'box_medium',
+    'box_small': 'box_small',
+    'box_template': 'box_template',
+    'logo_large': 'logo_large',
+    'logo_medium': 'logo_medium',
+    'logo_small': 'logo_small',
+    'logo_template': 'logo_template',
 };
 
 export default class GameService {
     constructor (config) {
-        this.axios = axios.create({
-            headers: {
-                'Client-ID': config.twitch_key
-            }
-        });
-
-        this.queue = [];
-        this.queueIds = [];
+        this.queue = new Queue(config.twitch_key, TWITCH_API, UNIQUE_ID, MAX_GAMES, MAX_QUEUE, INCREMENT, this.filterGameData, this.writeGamesToDB, this.getTotal);
     }
 
-    getGames (index = 0) {
-        console.log('Fetching Games:', index, '-', index + 100);
-        this.axios
-            .get(TWITCH_API, {
-                params: {
-                    offset: index,
-                    limit: INCREMENT
-                }
-            })
-            .then((res) => { 
-                const data = res.data;
-                const total = data._total;
-                const games = data.top;
-                let filtered = this.filterGameData(games);
-
-                filtered = filtered.filter((obj) => this.queueIds.indexOf(obj.game_id) === -1);
-
-                filtered.map((obj) => {
-                    this.queueIds.push(obj.game_id);
-                    return obj;
-                });
-
-                if(total > games.length + index && MAX_GAMES > games.length + index){
-                    if(this.queue.length > MAX_QUEUE) {
-                        this.writeGamesToDB(this.queue);
-                        this.queue = [];
-                        this.queueIds = [];
-                    }
-                    this.getGames(index + INCREMENT);
-                } else {
-                    console.log('Finished Game Collection');
-                }
-            });
+    getData (index = 0) {
+        console.log('Starting Game Collection');
+        return this.queue.getData();
     }
 
-    filterGameData (data) {
+    getTotal (data) {
+        return data._total;
+    }
+
+    filterGameData (data) {        
+        data = data.top;
         data = _.map(data, i => _.pick(i, [
             'game',
             'channels',
             'viewers'
         ]));
         
-        data = _.map(data, i => _.merge(i, i.channel));
-        
+        data = _.map(data, i => _.merge(i, i.game));
+        data = _.map(data, i => {
+            for(var k in i.box){
+                i['box_' + k] = i.box[k];
+            }
+
+            for(var k in i.logo){
+                i['logo_' + k] = i.logo[k];
+            }
+
+            return i;
+        });
+
         return _.chain(data)
             .map(i => _.pick(i, Object.keys(GAME_KEYS)))
             .map((obj) => {
@@ -102,7 +81,12 @@ export default class GameService {
             .value();
     }
 
-    writeGamesToDB (entry) {
-        
+    writeGamesToDB (entries) {
+        Game.bulkCreate(entries, {
+            hooks: true,
+            validate: true,
+            benchmark: true,
+            updateOnDuplicate:true
+        });
     }
 }

@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc  
  * 
- * Last Modified: Monday, 16th April 2018 10:38:58 pm
+ * Last Modified: Sunday, 22nd April 2018 5:05:44 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -31,11 +31,18 @@ function init () {
     const streamService = new StreamService(config);
     const gameService = new GameService(config);
     connection.sync().then(() => {
-        streamService.getLiveStreams();
-        gameService.getGames();
+        // streamService
+        //     .getData()
+        //     .then(() => {
+        //         gameService.getData();
+        //     });
     });
     
-    const twitchRequests = schedule.scheduleJob('*/10 * * * *', () => {
-        streamService.getLiveStreams();
+    const twitchRequests = schedule.scheduleJob('*/15 * * * *', () => {
+        streamService
+            .getData()
+            .then(() => {
+                gameService.getData();
+            });
     });
 }

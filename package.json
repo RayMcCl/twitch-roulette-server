@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "watch-api": "babel-node src/api-server/index.js",
+    "watch-dev-api": "babel src/api-server/index.js",
     "watch-collection": "babel-node src/collection-server/index.js"
   },
   "author": "",

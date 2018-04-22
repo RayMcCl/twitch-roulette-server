@@ -1,0 +1,27 @@
+/**
+ * Copyright 2018
+ * www.raymccl.com
+ * 
+ * @name jsconfig.json
+ * @author Ray McClain
+ * @desc 
+ * 
+ * Last Modified: Sunday, 22nd April 2018 1:23:45 pm
+ * Modified By: Ray McClain (reibmc@gmail.com>)
+ */
+
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "allowSyntheticDefaultImports": false,
+    "baseUrl": "./",
+    "paths": {
+        "~/*": ["./src/*"],
+        "DATABASE/*": ["./src/database/*"],
+        "COLLECTION/*": ["./src/collection-server/*"],
+        "API/*": ["./src/api-server/*"],
+        "SSH/*": ["./src/ssh/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
+}

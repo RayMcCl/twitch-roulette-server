@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Monday, 16th April 2018 6:37:21 pm
+ * Last Modified: Sunday, 22nd April 2018 3:50:06 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -17,6 +17,10 @@ const Game = connection.define('game', {
     id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
+        primaryKey: true
+    },
+    game_id: {
+        type: Sequelize.INTEGER,
         primaryKey: true
     },
     name: {
