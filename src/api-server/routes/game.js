@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Sunday, 22nd April 2018 5:52:37 pm
+ * Last Modified: Sunday, 22nd April 2018 6:01:10 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -30,9 +30,6 @@ export default class GameRoute {
                     [Game, 'viewers', 'DESC']
                 ],
                 limit: 100
-            })
-            .then(results => {
-                return results;
             })
             .then(results => res.send(JSON.stringify(results)));
     }
