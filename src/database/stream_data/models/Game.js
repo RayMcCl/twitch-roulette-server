@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Sunday, 22nd April 2018 3:50:06 pm
+ * Last Modified: Sunday, 22nd April 2018 6:23:50 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -44,9 +44,6 @@ const Game = connection.define('game', {
     box_small: {
         type: Sequelize.TEXT
     },
-    box_template: {
-        type: Sequelize.TEXT
-    },
     logo_large: {
         type: Sequelize.TEXT
     },
@@ -54,9 +51,6 @@ const Game = connection.define('game', {
         type: Sequelize.TEXT
     },
     logo_small: {
-        type: Sequelize.TEXT
-    },
-    logo_template: {
         type: Sequelize.TEXT
     }
 });

@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Sunday, 22nd April 2018 5:14:42 pm
+ * Last Modified: Sunday, 22nd April 2018 6:24:05 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -29,11 +29,9 @@ const GAME_KEYS = {
     'box_large': 'box_large',
     'box_medium': 'box_medium',
     'box_small': 'box_small',
-    'box_template': 'box_template',
     'logo_large': 'logo_large',
     'logo_medium': 'logo_medium',
-    'logo_small': 'logo_small',
-    'logo_template': 'logo_template',
+    'logo_small': 'logo_small'
 };
 
 export default class GameService {
