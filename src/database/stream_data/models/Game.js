@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Sunday, 22nd April 2018 6:33:26 pm
+ * Last Modified: Sunday, 22nd April 2018 7:40:46 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -55,7 +55,5 @@ const Game = connection.define('game', {
         type: Sequelize.TEXT
     }
 });
-
-Stream.hasOne(Game);
 
 export default Game;

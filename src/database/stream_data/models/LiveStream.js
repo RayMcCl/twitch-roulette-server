@@ -6,14 +6,13 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Sunday, 22nd April 2018 6:32:00 pm
+ * Last Modified: Sunday, 22nd April 2018 7:40:52 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
 import Sequelize from 'sequelize';
 import connection from '../connection';
 import Stream from './Stream';
-import Game from './Game';
 
 const LiveStream = connection.define('live_stream', {
     id: {
@@ -25,6 +24,5 @@ const LiveStream = connection.define('live_stream', {
 
 Stream.hasOne(LiveStream);
 LiveStream.belongsTo(Stream, { foreignKey: 'streamId' });
-LiveStream.hasOne(Game);
 
 export default LiveStream;
