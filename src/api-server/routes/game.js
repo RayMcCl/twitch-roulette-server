@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Sunday, 22nd April 2018 6:01:10 pm
+ * Last Modified: Sunday, 22nd April 2018 6:09:59 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -25,9 +25,9 @@ export default class GameRoute {
 
     requestHandler (req, res){
         Game
-            .find({
+            .findAll({
                 order: [
-                    [Game, 'viewers', 'DESC']
+                    ['viewers', 'DESC']
                 ],
                 limit: 100
             })
