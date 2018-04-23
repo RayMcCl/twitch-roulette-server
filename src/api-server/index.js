@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc  
  * 
- * Last Modified: Sunday, 22nd April 2018 7:36:57 pm
+ * Last Modified: Sunday, 22nd April 2018 7:48:39 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -31,12 +31,13 @@ if(config.ENV === 'dev'){
 
 function init () {
     const app = Express();
-
+ 
+    app.use(cors());      
+    
     const stream = new StreamRoute(app);
     const liveStream = new LiveStreamRoute(app);
     const game = new GameRoute(app);
 
-    app.use(cors());      
 
     app.get('/', (req, res) => {
         res.send('Hello World');
