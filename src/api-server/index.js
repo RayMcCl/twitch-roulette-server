@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc  
  * 
- * Last Modified: Sunday, 22nd April 2018 5:53:54 pm
+ * Last Modified: Sunday, 22nd April 2018 7:33:37 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 
@@ -35,6 +35,13 @@ function init () {
     const stream = new StreamRoute(app);
     const liveStream = new LiveStreamRoute(app);
     const game = new GameRoute(app);
+
+    app.use(function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    });
+      
 
     app.get('/', (req, res) => {
         res.send('Hello World');
