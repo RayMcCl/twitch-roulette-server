@@ -6,7 +6,7 @@
  * @author Ray McClain
  * @desc 
  * 
- * Last Modified: Sunday, 22nd April 2018 7:01:25 pm
+ * Last Modified: Sunday, 22nd April 2018 7:38:32 pm
  * Modified By: Ray McClain (reibmc@gmail.com>)
  */
 import Sequelize from 'sequelize';
@@ -25,7 +25,7 @@ const Stream = connection.define('stream', {
     stream_name: {
         type: Sequelize.STRING(45)
     },
-    game: {
+    game_name: {
         type: Sequelize.TEXT
     },
     display_name: {
